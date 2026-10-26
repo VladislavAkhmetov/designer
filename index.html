@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Симулятор Дизайнера</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- МИНИМАЛИСТИЧНЫЙ ВЕРХНИЙ БАР (БЕЗ МУСОРА И ОБВОДОК) -->
+  <header class="game-header">
+    <div class="game-brand">Симулятор Дизайнера</div>
+    <div class="game-stats">
+      <span class="stat-pill" id="stat-money">48.00 ₽</span>
+      <span class="stat-pill" id="stat-food">0 дошиков</span>
+      <button class="sound-toggle" id="sound-toggle" title="Звук">🔊</button>
+    </div>
+  </header>
+
+  <!-- СМАРТФОН-КОНТЕЙНЕР -->
+  <main class="phone-wrapper">
+    <div class="phone-frame">
+      
+      <!-- СТАТУС-БАР ТЕЛЕФОНА (DYNAMIC ISLAND) -->
+      <div class="phone-status-bar">
+        <span class="status-time" id="status-clock">19:42</span>
+        <div class="dynamic-island"></div>
+        <div class="status-icons">
+          <span>●●●●</span>
+          <span>WiFi</span>
+          <span class="status-battery">18%</span>
+        </div>
+      </div>
+
+      <!-- ВСПЛЫВАЮЩИЕ ПУШ-УВЕДОМЛЕНИЯ -->
+      <div class="push-layer" id="push-layer"></div>
+
+      <!-- ЭКРАН 1: FMV ИНТРО (ШОТ 1 + ШОТ 2) -->
+      <div class="scene fmv-scene active" id="scene-intro">
+        <video id="intro-video" playsinline webkit-playsinline preload="auto"></video>
+        
+        <div class="fmv-overlay" id="intro-overlay">
+          <div class="fmv-pill" id="fmv-pill">🔴 Реклама: Успешный успех</div>
+          
+          <button class="fmv-skip-btn hidden" id="intro-skip-btn">Пропустить ⏭</button>
+
+          <!-- Кнопка старта перед началом -->
+          <div class="intro-start-wrap" id="intro-start-wrap">
+            <button class="hero-start-btn" id="start-game-btn">
+              <span>▶</span> Запустить игру
+            </button>
+          </div>
+          
+          <div class="fmv-timeline">
+            <div class="fmv-timeline-fill" id="intro-timeline-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ЭКРАН 2: ТЕЛЕГРАМ (ЧАТ С СЕРЁЖЕЙ -> КРУЖОЧЕК -> ПОЛНЫЙ ЭКРАН САМВЕЛА) -->
+      <div class="scene chat-scene" id="scene-chat">
+        
+        <!-- Шапка Телеграма -->
+        <div class="tg-navbar">
+          <div class="tg-nav-back">‹</div>
+          <div class="tg-nav-avatar">🦩</div>
+          <div class="tg-nav-meta">
+            <div class="tg-nav-title">Серёжа (UX Бог) <span class="tg-check">✓</span></div>
+            <div class="tg-nav-status">был(а) недавно</div>
+          </div>
+          <div class="tg-nav-more">⋮</div>
+        </div>
+
+        <!-- Сообщения чата (без скролла, сразу нужные реплики) -->
+        <div class="tg-content">
+          <div class="tg-date">СЕГОДНЯ</div>
+
+          <div class="tg-bubble incoming">
+            Поздравляю с окончанием курса <b>«UX/UI Бог за 3 дня»</b>! 🎓 Сертификат в астрале. Как сохранять в PNG ты уже понял, остальное нагуглишь.
+            <div class="tg-bubble-meta">19:34 ✓✓</div>
+          </div>
+
+          <div class="tg-bubble incoming">
+            🚀 <b>Секретный шаг:</b> жми кнопку внизу и запускай веерную рассылку по записной книжке. Кто-то точно клюнет!
+            <div class="tg-bubble-meta">19:35 ✓✓</div>
+          </div>
+
+          <!-- Блок с кружочком Самвела (появляется после рассылки) -->
+          <div class="samvel-chat-anchor hidden" id="samvel-chat-anchor">
+            <!-- Контейнер кружочка, который плавно морфится во весь экран -->
+            <div class="samvel-video-box" id="samvel-video-box">
+              <video id="samvel-video" src="samvel-start.mp4" playsinline webkit-playsinline></video>
+              
+              <div class="samvel-sound-badge" id="samvel-sound-badge">🔊</div>
+              <button class="samvel-skip-btn hidden" id="samvel-skip-btn">Пропустить ⏭</button>
+
+              <!-- ОВЕРЛЕЙ ВЫБОРА: ВСПЛЫВАЕТ ПОВЕРХ ЗАСТЫВШЕГО ПОСЛЕДНЕГО КАДРА -->
+              <div class="choice-overlay hidden" id="choice-overlay">
+                <div class="choice-brief-pill">
+                  🎯 Вывеска: «ШАУРМА — ЭТО ВАМ НЕ ЭТО» • 💰 1 000 ₽ + 2 донера
+                </div>
+                
+                <div class="choice-heading">Какой концепт отдаем Самвелу?</div>
+
+                <div class="choice-cards">
+                  <!-- Вариант 1: Народный люкс (Канон) -->
+                  <div class="choice-item recommended" data-choice="lux">
+                    <div class="choice-item-badge">ВЫБОР КЛИЕНТА</div>
+                    <div class="choice-item-icon">🔥</div>
+                    <div class="choice-item-body">
+                      <div class="choice-item-title">Народный Люкс</div>
+                      <div class="choice-item-sub">Кислотный огонь, гигантское мясо, золотой Comic Sans</div>
+                    </div>
+                  </div>
+
+                  <!-- Вариант 2: Минимализм -->
+                  <div class="choice-item" data-choice="minimal">
+                    <div class="choice-item-icon">⚪</div>
+                    <div class="choice-item-body">
+                      <div class="choice-item-title">Скандинавский минимализм</div>
+                      <div class="choice-item-sub">Бежевый лист, точка по центру, Helvetica 9pt</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ОВЕРЛЕЙ РЕАКЦИИ (ПОЯВЛЯЕТСЯ ТАМ ЖЕ БЕЗ СКРОЛЛА) -->
+              <div class="result-overlay hidden" id="result-overlay">
+                <div class="result-card" id="result-card">
+                  <!-- Динамическое наполнение JS -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Нижняя панель с кнопкой рассылки (прибита к низу, видна сразу) -->
+        <div class="tg-dock" id="tg-dock">
+          <button class="tg-dock-btn pulse-glow" id="btn-mass-mail">
+            <span>✉️</span> Запустить веерную рассылку (142 контакта)
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
