@@ -2,155 +2,427 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Симулятор Дизайнера</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>Симулятор дизайнера</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Comic+Neue:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,500;1,400&display=swap" rel="stylesheet">
+  <!-- Общие стили игры (переиспользуются на всех уровнях) -->
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/start.css">
+  <link rel="stylesheet" href="styles/telegram.css">
+  <link rel="stylesheet" href="styles/push.css">
+  <link rel="stylesheet" href="styles/player.css">
+  <link rel="stylesheet" href="styles/figma.css">
+  <!-- Уровень 1 -->
+  <link rel="stylesheet" href="levels/level-1/level1.css">
+  <!-- Уровень 2 -->
+  <link rel="stylesheet" href="levels/level-2/level2.css">
+  <!-- Уровень 3 -->
+  <link rel="stylesheet" href="levels/level-3/level3.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+<div id="app">
 
-  <!-- МИНИМАЛИСТИЧНЫЙ ВЕРХНИЙ БАР (БЕЗ МУСОРА И ОБВОДОК) -->
-  <header class="game-header">
-    <div class="game-brand">Симулятор Дизайнера</div>
-    <div class="game-stats">
-      <span class="stat-pill" id="stat-money">48.00 ₽</span>
-      <span class="stat-pill" id="stat-food">0 дошиков</span>
-      <button class="sound-toggle" id="sound-toggle" title="Звук">🔊</button>
+  <!-- Старт + интро-видео -->
+  <section class="screen intro is-active" id="intro">
+    <video id="introVideo" class="is-teaser" src="start-1.mp4" muted loop autoplay playsinline webkit-playsinline preload="auto"></video>
+    <video id="introVideo2" class="intro-next" src="start-2.mp4#t=0.01" playsinline webkit-playsinline preload="auto"></video>
+    <!-- Реклама курса поверх интро: живёт в небе над героем -->
+    <div class="ad" id="ad" aria-hidden="true">
+      <div class="ad-marquee"><div><span>ДИЗАЙН-БОГ</span><span>ДИЗАЙН-БОГ</span><span>ДИЗАЙН-БОГ</span><span>ДИЗАЙН-БОГ</span></div></div>
+      <div class="ad-copy">
+        <span class="ad-chip">Курс «Дизайн-бог»</span>
+        <span class="ad-line"><span>Зарабатывай по</span></span>
+        <span class="ad-line ad-big"><span><b class="ad-hl"></b><em id="adMoney">0</em>&nbsp;₽</span></span>
+        <span class="ad-line"><span>уже через <u>2 недели<svg viewBox="0 0 120 12" preserveAspectRatio="none"><path pathLength="100" d="M2 7 Q9 1 16 7 T30 7 T44 7 T58 7 T72 7 T86 7 T100 7 T118 6"/></svg></u></span></span>
+        <span class="ad-line ad-small"><span>обучения у меня</span></span>
+      </div>
     </div>
-  </header>
+    <button class="skip" id="introSkip" hidden>Пропустить</button>
 
-  <!-- СМАРТФОН-КОНТЕЙНЕР -->
-  <main class="phone-wrapper">
-    <div class="phone-frame">
-      
-      <!-- СТАТУС-БАР ТЕЛЕФОНА (DYNAMIC ISLAND) -->
-      <div class="phone-status-bar">
-        <span class="status-time" id="status-clock">19:42</span>
-        <div class="dynamic-island"></div>
-        <div class="status-icons">
-          <span>●●●●</span>
-          <span>WiFi</span>
-          <span class="status-battery">18%</span>
-        </div>
+    <div class="start" id="start">
+      <svg class="stamp" viewBox="0 0 120 120" aria-hidden="true">
+        <defs><path id="stampPath" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs>
+        <circle cx="60" cy="60" r="57" />
+        <circle cx="60" cy="60" r="34" />
+        <text><textPath href="#stampPath">СЕРТИФИКАТ · ДИЗАЙН-БОГ · ЗА 2 НЕДЕЛИ ·</textPath></text>
+        <text class="stamp-core" x="60" y="67" text-anchor="middle">PNG</text>
+      </svg>
+
+      <div class="cursor c1" style="--c:#f24822"><svg viewBox="0 0 20 20"><path d="M3 2l14 6.4-6.2 1.7L8.3 16z"/></svg><span>Самвел</span></div>
+      <div class="cursor c2" style="--c:#14ae5c"><svg viewBox="0 0 20 20"><path d="M3 2l14 6.4-6.2 1.7L8.3 16z"/></svg><span>Бабуля</span></div>
+      <div class="cursor c3" style="--c:#9747ff"><svg viewBox="0 0 20 20"><path d="M3 2l14 6.4-6.2 1.7L8.3 16z"/></svg><span>Дизайн-бог</span></div>
+
+      <h1 class="title">
+        <span class="t1">Симулятор</span>
+        <span class="t2">дизайнера<i></i><i></i><i></i><i></i><em>Fill × Hug</em></span>
+      </h1>
+      <p class="tagline">На карте 48 ₽. Пора зарабатывать</p>
+      <button class="start-btn" id="playBtn">
+        Начать
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- Канал курса (инфоцыган) -->
+  <section class="screen chat" id="chatA">
+    <header class="tg-head">
+      <svg class="tg-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+      <div class="avatar av-course">ДБ</div>
+      <div class="tg-head-meta">
+        <div class="tg-name">Курс ДИЗАЙН-БОГ</div>
+        <div class="tg-status">12 480 подписчиков</div>
       </div>
+    </header>
+    <div class="tg-feed"><div class="tg-date">Сегодня</div></div>
+    <div class="tg-bottom is-hidden" id="tgBottom">
+      <button class="tg-main" id="sendAll"><span class="tg-main-fill"></span><span class="tg-main-label">Разослать всем контактам</span></button>
+    </div>
+  </section>
 
-      <!-- ВСПЛЫВАЮЩИЕ ПУШ-УВЕДОМЛЕНИЯ -->
-      <div class="push-layer" id="push-layer"></div>
-
-      <!-- ЭКРАН 1: FMV ИНТРО (ШОТ 1 + ШОТ 2) -->
-      <div class="scene fmv-scene active" id="scene-intro">
-        <video id="intro-video" playsinline webkit-playsinline preload="auto"></video>
-        
-        <div class="fmv-overlay" id="intro-overlay">
-          <div class="fmv-pill" id="fmv-pill">🔴 Реклама: Успешный успех</div>
-          
-          <button class="fmv-skip-btn hidden" id="intro-skip-btn">Пропустить ⏭</button>
-
-          <!-- Кнопка старта перед началом -->
-          <div class="intro-start-wrap" id="intro-start-wrap">
-            <button class="hero-start-btn" id="start-game-btn">
-              <span>▶</span> Запустить игру
-            </button>
-          </div>
-          
-          <div class="fmv-timeline">
-            <div class="fmv-timeline-fill" id="intro-timeline-fill"></div>
-          </div>
-        </div>
+  <!-- Чат с Самвелом (заказчик 1) -->
+  <section class="screen chat" id="chatB">
+    <header class="tg-head">
+      <svg class="tg-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+      <div class="avatar av-red">С</div>
+      <div class="tg-head-meta">
+        <div class="tg-name">Самвел · Шаурма 24</div>
+        <div class="tg-status">в сети</div>
       </div>
+    </header>
+    <div class="tg-feed"><div class="tg-date">Сегодня</div></div>
+    <div class="tg-composer">
+      <svg viewBox="0 0 24 24"><path d="M21 11.5l-8.6 8.6a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9"/></svg>
+      <div class="tg-input">Сообщение</div>
+      <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="8.5"/><circle cx="12" cy="12" r="3.2"/></svg>
+    </div>
+  </section>
 
-      <!-- ЭКРАН 2: ТЕЛЕГРАМ (ЧАТ С СЕРЁЖЕЙ -> КРУЖОЧЕК -> ПОЛНЫЙ ЭКРАН САМВЕЛА) -->
-      <div class="scene chat-scene" id="scene-chat">
-        
-        <!-- Шапка Телеграма -->
-        <div class="tg-navbar">
-          <div class="tg-nav-back">‹</div>
-          <div class="tg-nav-avatar">🦩</div>
-          <div class="tg-nav-meta">
-            <div class="tg-nav-title">Серёжа (UX Бог) <span class="tg-check">✓</span></div>
-            <div class="tg-nav-status">был(а) недавно</div>
-          </div>
-          <div class="tg-nav-more">⋮</div>
-        </div>
+  <!-- Чат с Михалычем (заказчик 2: автосервис) -->
+  <section class="screen chat" id="chatC">
+    <header class="tg-head">
+      <svg class="tg-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+      <div class="avatar av-gray">М</div>
+      <div class="tg-head-meta">
+        <div class="tg-name">Михалыч · Автосервис</div>
+        <div class="tg-status">в сети</div>
+      </div>
+    </header>
+    <div class="tg-feed"><div class="tg-date">Сегодня</div></div>
+    <div class="tg-composer">
+      <svg viewBox="0 0 24 24"><path d="M21 11.5l-8.6 8.6a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9"/></svg>
+      <div class="tg-input">Сообщение</div>
+      <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="8.5"/><circle cx="12" cy="12" r="3.2"/></svg>
+    </div>
+  </section>
 
-        <!-- Сообщения чата (без скролла, сразу нужные реплики) -->
-        <div class="tg-content">
-          <div class="tg-date">СЕГОДНЯ</div>
+  <!-- Чат с Анжеликой (заказчик 3: ноготочки) -->
+  <section class="screen chat" id="chatD">
+    <header class="tg-head">
+      <svg class="tg-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+      <div class="avatar av-violet">А</div>
+      <div class="tg-head-meta">
+        <div class="tg-name">Анжелика · Luxury Nails</div>
+        <div class="tg-status">в сети</div>
+      </div>
+    </header>
+    <div class="tg-feed"><div class="tg-date">Сегодня</div></div>
+    <div class="tg-composer">
+      <svg viewBox="0 0 24 24"><path d="M21 11.5l-8.6 8.6a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9"/></svg>
+      <div class="tg-input">Сообщение</div>
+      <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="8.5"/><circle cx="12" cy="12" r="3.2"/></svg>
+    </div>
+  </section>
 
-          <div class="tg-bubble incoming">
-            Поздравляю с окончанием курса <b>«UX/UI Бог за 3 дня»</b>! 🎓 Сертификат в астрале. Как сохранять в PNG ты уже понял, остальное нагуглишь.
-            <div class="tg-bubble-meta">19:34 ✓✓</div>
-          </div>
+  <!-- Видеосообщение: кружок -> полный экран -->
+  <div class="player" id="player" hidden>
+    <video id="pv" playsinline webkit-playsinline preload="auto"></video>
+    <button class="skip" id="pvSkip">Пропустить</button>
+  </div>
 
-          <div class="tg-bubble incoming">
-            🚀 <b>Секретный шаг:</b> жми кнопку внизу и запускай веерную рассылку по записной книжке. Кто-то точно клюнет!
-            <div class="tg-bubble-meta">19:35 ✓✓</div>
-          </div>
+  <div class="backdrop" id="backdrop"></div>
 
-          <!-- Блок с кружочком Самвела (появляется после рассылки) -->
-          <div class="samvel-chat-anchor hidden" id="samvel-chat-anchor">
-            <!-- Контейнер кружочка, который плавно морфится во весь экран -->
-            <div class="samvel-video-box" id="samvel-video-box">
-              <video id="samvel-video" src="samvel-start.mp4" playsinline webkit-playsinline></video>
-              
-              <div class="samvel-sound-badge" id="samvel-sound-badge">🔊</div>
-              <button class="samvel-skip-btn hidden" id="samvel-skip-btn">Пропустить ⏭</button>
+  <!-- Выбор: Самвел (Figma) -->
+  <section class="sheet" id="sheet" aria-hidden="true">
+    <div class="sheet-grip"></div>
+    <h2>Что отправим Самвелу?</h2>
+    <div class="frames">
+      <button class="frame" data-choice="lux">
+        <span class="frame-name"><b>#</b> Народный люкс</span>
+        <span class="frame-box">
+          <span class="sign sign-lux">
+            <span class="lux-bulbs"></span>
+            <span class="lux-left">
+              <span class="lux-title">ШАУРМА</span>
+              <span class="lux-ribbon">это вам не это</span>
+              <span class="lux-247">24/7</span>
+            </span>
+            <span class="lux-photo"><img src="images/shawarma.jpg" alt="Шаурма"></span>
+            <span class="lux-burst"><span>от<b>199₽</b></span></span>
+            <span class="lux-spark s1">✦</span><span class="lux-spark s2">✦</span><span class="lux-spark s3">✦</span>
+          </span>
+          <span class="sel"><i></i><i></i><i></i><i></i><em>1920 × 1080</em></span>
+        </span>
+      </button>
+      <button class="frame" data-choice="minimal">
+        <span class="frame-name"><b>#</b> Минимализм</span>
+        <span class="frame-box">
+          <span class="sign sign-min">
+            <span class="gr-mark"><svg class="laurel" viewBox="0 0 100 100" aria-hidden="true"><path d="M43.40 87.42 L41.32 87.00 L39.27 86.45 L37.25 85.80 L35.27 85.03 L33.34 84.15 L31.46 83.17 L29.64 82.08 L27.88 80.90 L26.19 79.61 L24.57 78.24 L23.04 76.78 L21.58 75.23 L20.22 73.60 L18.95 71.90 L17.77 70.14 L16.70 68.31 L15.73 66.42 L14.87 64.48 L14.11 62.50 L13.47 60.47 L12.94 58.42 L12.53 56.34 L12.24 54.24 L12.06 52.12 L12.00 50.00 L12.06 47.88 L12.24 45.76 L12.53 43.66 L12.94 41.58 L13.47 39.53 L14.11 37.50 L14.87 35.52 L15.73 33.58 L16.70 31.69 L17.77 29.86 L18.95 28.10 L20.22 26.40 L21.58 24.77 L23.04 23.22 L24.57 21.76" class="lw-stem"/><ellipse cx="36.90" cy="89.06" rx="1.56" ry="4.49" transform="rotate(76.5 36.90 89.06)"/><ellipse cx="38.94" cy="83.00" rx="1.56" ry="4.49" transform="rotate(140.5 38.94 83.00)"/><ellipse cx="27.71" cy="84.65" rx="1.50" ry="4.31" transform="rotate(90.8 27.71 84.65)"/><ellipse cx="31.17" cy="79.27" rx="1.50" ry="4.31" transform="rotate(154.8 31.17 79.27)"/><ellipse cx="19.88" cy="78.11" rx="1.44" ry="4.13" transform="rotate(105.0 19.88 78.11)"/><ellipse cx="24.56" cy="73.74" rx="1.44" ry="4.13" transform="rotate(169.0 24.56 73.74)"/><ellipse cx="13.90" cy="69.85" rx="1.38" ry="3.96" transform="rotate(119.2 13.90 69.85)"/><ellipse cx="19.50" cy="66.77" rx="1.38" ry="3.96" transform="rotate(183.2 19.50 66.77)"/><ellipse cx="10.13" cy="60.37" rx="1.31" ry="3.78" transform="rotate(133.4 10.13 60.37)"/><ellipse cx="16.32" cy="58.76" rx="1.31" ry="3.78" transform="rotate(197.4 16.32 58.76)"/><ellipse cx="8.80" cy="50.26" rx="1.25" ry="3.60" transform="rotate(147.6 8.80 50.26)"/><ellipse cx="15.20" cy="50.22" rx="1.25" ry="3.60" transform="rotate(211.6 15.20 50.22)"/><ellipse cx="10.00" cy="40.13" rx="1.19" ry="3.42" transform="rotate(161.9 10.00 40.13)"/><ellipse cx="16.21" cy="41.66" rx="1.19" ry="3.42" transform="rotate(225.9 16.21 41.66)"/><ellipse cx="13.65" cy="30.60" rx="1.13" ry="3.24" transform="rotate(176.1 13.65 30.60)"/><ellipse cx="19.30" cy="33.61" rx="1.13" ry="3.24" transform="rotate(240.1 19.30 33.61)"/><ellipse cx="19.53" cy="22.27" rx="1.06" ry="3.06" transform="rotate(190.3 19.53 22.27)"/><ellipse cx="24.27" cy="26.57" rx="1.06" ry="3.06" transform="rotate(254.3 24.27 26.57)"/><path d="M56.60 87.42 L58.68 87.00 L60.73 86.45 L62.75 85.80 L64.73 85.03 L66.66 84.15 L68.54 83.17 L70.36 82.08 L72.12 80.90 L73.81 79.61 L75.43 78.24 L76.96 76.78 L78.42 75.23 L79.78 73.60 L81.05 71.90 L82.23 70.14 L83.30 68.31 L84.27 66.42 L85.13 64.48 L85.89 62.50 L86.53 60.47 L87.06 58.42 L87.47 56.34 L87.76 54.24 L87.94 52.12 L88.00 50.00 L87.94 47.88 L87.76 45.76 L87.47 43.66 L87.06 41.58 L86.53 39.53 L85.89 37.50 L85.13 35.52 L84.27 33.58 L83.30 31.69 L82.23 29.86 L81.05 28.10 L79.78 26.40 L78.42 24.77 L76.96 23.22 L75.43 21.76" class="lw-stem"/><ellipse cx="63.10" cy="89.06" rx="1.56" ry="4.49" transform="rotate(-76.5 63.10 89.06)"/><ellipse cx="61.06" cy="83.00" rx="1.56" ry="4.49" transform="rotate(-140.5 61.06 83.00)"/><ellipse cx="72.29" cy="84.65" rx="1.50" ry="4.31" transform="rotate(-90.8 72.29 84.65)"/><ellipse cx="68.83" cy="79.27" rx="1.50" ry="4.31" transform="rotate(-154.8 68.83 79.27)"/><ellipse cx="80.12" cy="78.11" rx="1.44" ry="4.13" transform="rotate(-105.0 80.12 78.11)"/><ellipse cx="75.44" cy="73.74" rx="1.44" ry="4.13" transform="rotate(-169.0 75.44 73.74)"/><ellipse cx="86.10" cy="69.85" rx="1.38" ry="3.96" transform="rotate(-119.2 86.10 69.85)"/><ellipse cx="80.50" cy="66.77" rx="1.38" ry="3.96" transform="rotate(-183.2 80.50 66.77)"/><ellipse cx="89.87" cy="60.37" rx="1.31" ry="3.78" transform="rotate(-133.4 89.87 60.37)"/><ellipse cx="83.68" cy="58.76" rx="1.31" ry="3.78" transform="rotate(-197.4 83.68 58.76)"/><ellipse cx="91.20" cy="50.26" rx="1.25" ry="3.60" transform="rotate(-147.6 91.20 50.26)"/><ellipse cx="84.80" cy="50.22" rx="1.25" ry="3.60" transform="rotate(-211.6 84.80 50.22)"/><ellipse cx="90.00" cy="40.13" rx="1.19" ry="3.42" transform="rotate(-161.9 90.00 40.13)"/><ellipse cx="83.79" cy="41.66" rx="1.19" ry="3.42" transform="rotate(-225.9 83.79 41.66)"/><ellipse cx="86.35" cy="30.60" rx="1.13" ry="3.24" transform="rotate(-176.1 86.35 30.60)"/><ellipse cx="80.70" cy="33.61" rx="1.13" ry="3.24" transform="rotate(-240.1 80.70 33.61)"/><ellipse cx="80.47" cy="22.27" rx="1.06" ry="3.06" transform="rotate(-190.3 80.47 22.27)"/><ellipse cx="75.73" cy="26.57" rx="1.06" ry="3.06" transform="rotate(-254.3 75.73 26.57)"/></svg><span class="gr-mono">Ш</span></span>
+            <span class="gr-word">ШАУРМА</span>
+            <span class="gr-sub">пища богов · MMXXV</span>
+          </span>
+          <span class="sel"><i></i><i></i><i></i><i></i><em>1920 × 1080</em></span>
+        </span>
+      </button>
+    </div>
+  </section>
 
-              <!-- ОВЕРЛЕЙ ВЫБОРА: ВСПЛЫВАЕТ ПОВЕРХ ЗАСТЫВШЕГО ПОСЛЕДНЕГО КАДРА -->
-              <div class="choice-overlay hidden" id="choice-overlay">
-                <div class="choice-brief-pill">
-                  🎯 Вывеска: «ШАУРМА — ЭТО ВАМ НЕ ЭТО» • 💰 1 000 ₽ + 2 донера
-                </div>
-                
-                <div class="choice-heading">Какой концепт отдаем Самвелу?</div>
-
-                <div class="choice-cards">
-                  <!-- Вариант 1: Народный люкс (Канон) -->
-                  <div class="choice-item recommended" data-choice="lux">
-                    <div class="choice-item-badge">ВЫБОР КЛИЕНТА</div>
-                    <div class="choice-item-icon">🔥</div>
-                    <div class="choice-item-body">
-                      <div class="choice-item-title">Народный Люкс</div>
-                      <div class="choice-item-sub">Кислотный огонь, гигантское мясо, золотой Comic Sans</div>
-                    </div>
-                  </div>
-
-                  <!-- Вариант 2: Минимализм -->
-                  <div class="choice-item" data-choice="minimal">
-                    <div class="choice-item-icon">⚪</div>
-                    <div class="choice-item-body">
-                      <div class="choice-item-title">Скандинавский минимализм</div>
-                      <div class="choice-item-sub">Бежевый лист, точка по центру, Helvetica 9pt</div>
-                    </div>
-                  </div>
-                </div>
+  <!-- Выбор: Михалыч (Figma) -->
+  <section class="sheet" id="sheet2" aria-hidden="true">
+    <div class="sheet-grip"></div>
+    <h2>Что отправим Михалычу?</h2>
+    <div class="frames">
+      <button class="frame" data-choice="minimal">
+        <span class="frame-name"><b>#</b> Стильный минимализм</span>
+        <span class="frame-box">
+          <span class="sign sign-service-min">
+            <div class="stealth-main">
+              <svg class="stealth-turbine" viewBox="0 0 100 100">
+                <defs>
+                  <linearGradient id="fanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="25%" stop-color="#e2e8f0"/>
+                    <stop offset="65%" stop-color="#64748b"/>
+                    <stop offset="90%" stop-color="#334155"/>
+                    <stop offset="100%" stop-color="#0f172a"/>
+                  </linearGradient>
+                  <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="40%" stop-color="#94a3b8"/>
+                    <stop offset="80%" stop-color="#334155"/>
+                    <stop offset="100%" stop-color="#1e293b"/>
+                  </linearGradient>
+                  <g id="fanBlade">
+                    <path d="M 50.00 33.00 C 50.84 27.05, 52.82 20.37, 57.51 5.37 A 45.8 45.8 0 0 1 73.18 12.87 C 69.34 22.84, 63.85 28.53, 66.25 36.98 A 17 17 0 0 0 50.00 33.00 Z" fill="url(#fanGrad)" stroke="#090b0e" stroke-width="0.6"/>
+                    <path d="M 50.00 33.00 C 50.84 27.05, 52.82 20.37, 57.51 5.37 L 58.11 6.55 C 53.64 21.28, 51.78 27.87, 50.59 33.10 Z" fill="#ffffff" opacity="0.95"/>
+                    <path d="M 50.00 33.00 C 50.84 27.05, 52.82 20.37, 57.51 5.37 A 45.8 45.8 0 0 1 73.18 12.87 C 69.34 22.84, 63.85 28.53, 66.25 36.98 A 17 17 0 0 0 50.00 33.00 Z" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+                  </g>
+                </defs>
+                <!-- Обод вентилятора -->
+                <circle cx="50" cy="50" r="48" fill="none" stroke="url(#rimGrad)" stroke-width="2.6"/>
+                <circle cx="50" cy="50" r="49.3" fill="none" stroke="#090b0e" stroke-width="0.5"/>
+                <circle cx="50" cy="50" r="46.7" fill="none" stroke="#ffffff" stroke-width="0.6" opacity="0.8"/>
+                <circle cx="50" cy="50" r="45.8" fill="#090b0e"/>
+                <!-- 9 идентичных лопастей равной длины -->
+                <use href="#fanBlade" transform="rotate(0.00 50 50)"/>
+                <use href="#fanBlade" transform="rotate(40.00 50 50)"/>
+                <use href="#fanBlade" transform="rotate(80.00 50 50)"/>
+                <use href="#fanBlade" transform="rotate(120.00 50 50)"/>
+                <use href="#fanBlade" transform="rotate(160.00 50 50)"/>
+                <use href="#fanBlade" transform="rotate(200.00 50 50)"/>
+                <use href="#fanBlade" transform="rotate(240.00 50 50)"/>
+                <use href="#fanBlade" transform="rotate(280.00 50 50)"/>
+                <use href="#fanBlade" transform="rotate(320.00 50 50)"/>
+                <!-- Ступица с фланцем и отверстиями под болты -->
+                <circle cx="50" cy="50" r="17.0" fill="#181c24" stroke="#ffffff" stroke-width="1.2"/>
+                <circle cx="50" cy="50" r="14.8" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="0.7"/>
+                <circle cx="50" cy="50" r="13.2" fill="#101318" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+                <circle cx="61.00" cy="50.00" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                <circle cx="59.53" cy="55.50" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                <circle cx="55.50" cy="59.53" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                <circle cx="50.00" cy="61.00" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                <circle cx="44.50" cy="59.53" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                <circle cx="40.47" cy="55.50" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                <circle cx="39.00" cy="50.00" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                <circle cx="40.47" cy="44.50" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                <circle cx="44.50" cy="40.47" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                <circle cx="50.00" cy="39.00" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                <circle cx="55.50" cy="40.47" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                <circle cx="59.53" cy="44.50" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                <!-- Центральное посадочное отверстие -->
+                <circle cx="50" cy="50" r="7.0" fill="#090b0e" stroke="#ffffff" stroke-width="1"/>
+                <circle cx="50" cy="50" r="3.8" fill="#141820"/>
+              </svg>
+              <div class="stealth-title-box">
+                <span class="stealth-title">АВТОСЕРВИС</span>
+                <span class="stealth-sub">ТОЧНАЯ МЕХАНИКА & ТЮНИНГ</span>
               </div>
-
-              <!-- ОВЕРЛЕЙ РЕАКЦИИ (ПОЯВЛЯЕТСЯ ТАМ ЖЕ БЕЗ СКРОЛЛА) -->
-              <div class="result-overlay hidden" id="result-overlay">
-                <div class="result-card" id="result-card">
-                  <!-- Динамическое наполнение JS -->
-                </div>
+            </div>
+            <div class="stealth-bottom">
+              <span>СХОД-РАЗВАЛ 3D</span>
+              <span>РЕМОНТ ДВС</span>
+              <span>ДИАГНОСТИКА</span>
+            </div>
+          </span>
+          <span class="sel"><i></i><i></i><i></i><i></i><em>1920 × 1080</em></span>
+        </span>
+      </button>
+      <button class="frame" data-choice="brutal">
+        <span class="frame-name"><b>#</b> Мужской стандарт</span>
+        <span class="frame-box">
+          <span class="sign sign-brutal">
+            <div class="tacky-checkers l"></div>
+            <div class="tacky-checkers r"></div>
+            <div class="tacky-top-row">
+              <span class="tacky-badge-title">СТО ГАРАЖ №7 У МИХАЛЫЧА</span>
+              <span class="tacky-phone">8-900-СТО-ЧЁТКО</span>
+            </div>
+            <div class="tacky-star">
+              <span>СКИДКА</span>
+              <span>-30%</span>
+            </div>
+            <div class="tacky-mid">
+              <div class="tacky-big-word">АВТОСЕРВИС</div>
+              <div class="tacky-chips-row">
+                <span class="t-chip y">СХОД-РАЗВАЛ 3D</span>
+                <span class="t-chip">РЕМОНТ ДВС</span>
+                <span class="t-chip y">СВАРКА</span>
               </div>
+            </div>
+            <div class="tacky-footer-items">
+              <span><b>✔</b> БЫСТРО</span>
+              <span><b>✔</b> ДЁШЕВО</span>
+              <span><b>✔</b> ЗАЕЗД 24 ЧАСА ➔</span>
+            </div>
+            <span class="tacky-flame">🔥</span>
+            <div class="tacky-hazard"></div>
+          </span>
+          <span class="sel"><i></i><i></i><i></i><i></i><em>1920 × 1080</em></span>
+        </span>
+      </button>
+    </div>
+  </section>
 
+  <!-- Выбор: Анжелика (Figma) -->
+  <section class="sheet" id="sheet3" aria-hidden="true">
+    <div class="sheet-grip"></div>
+    <h2>Что отправим Анжелике?</h2>
+    <div class="frames">
+      <button class="frame" data-choice="minimal">
+        <span class="frame-name"><b>#</b> Высокий минимализм</span>
+        <span class="frame-box">
+          <span class="sign sign-beauty-min">
+            <span class="clean-beauty-title">ANZHELIKA</span>
+            <span class="clean-beauty-sub">СТУДИЯ МАНИКЮРА</span>
+            <div class="clean-beauty-list">
+              <span>МАНИКЮР</span>
+              <span>•</span>
+              <span>ПЕДИКЮР</span>
+              <span>•</span>
+              <span>УХОД</span>
+            </div>
+          </span>
+          <span class="sel"><i></i><i></i><i></i><i></i><em>1920 × 1080</em></span>
+        </span>
+      </button>
+      <button class="frame" data-choice="glamour">
+        <span class="frame-name"><b>#</b> Luxury Glamour</span>
+        <span class="frame-box">
+          <span class="sign sign-glamour">
+            <span class="rhinestone tl"></span><span class="rhinestone tr"></span>
+            <span class="rhinestone bl"></span><span class="rhinestone br"></span>
+            <span class="glamour-inner-border"></span>
+            <span class="glamour-sparkle s1">✦</span><span class="glamour-sparkle s2">✨</span>
+            <span class="glamour-sparkle s3">💖</span><span class="glamour-sparkle s4">✦</span>
+            <div class="glamour-content">
+              <svg class="glamour-crown" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5m14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+              <span class="glamour-title">LUXURY NAILS</span>
+              <span class="glamour-sub">by Anzhelika</span>
+              <div class="glamour-ribbon">
+                <span>Маникюр</span>•<span>Реснички</span>•<span>Prosecco</span>
+              </div>
+            </div>
+          </span>
+          <span class="sel"><i></i><i></i><i></i><i></i><em>1920 × 1080</em></span>
+        </span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Финальный экран: завершение Части 1 -->
+  <section class="screen outro" id="outro">
+    <div class="outro-bg"></div>
+
+    <!-- Вращающийся штамп в стиле стартового экрана -->
+    <svg class="stamp stamp-win" viewBox="0 0 120 120" aria-hidden="true">
+      <defs><path id="outroStampPath" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs>
+      <circle cx="60" cy="60" r="57" />
+      <circle cx="60" cy="60" r="34" />
+      <text><textPath href="#outroStampPath">ДИЗАЙНЕР ВЫЖИЛ · ЧАСТЬ 1 ПРОЙДЕНА ·</textPath></text>
+      <text class="stamp-core" x="60" y="67" text-anchor="middle">PRO</text>
+    </svg>
+
+    <!-- Мультиплеерные курсоры всех заказчиков первой части -->
+    <div class="cursor c1" style="--c:#f24822"><svg viewBox="0 0 20 20"><path d="M3 2l14 6.4-6.2 1.7L8.3 16z"/></svg><span>Самвел: Вах!</span></div>
+    <div class="cursor c2" style="--c:#5f6b77"><svg viewBox="0 0 20 20"><path d="M3 2l14 6.4-6.2 1.7L8.3 16z"/></svg><span>Михалыч: Чётко!</span></div>
+    <div class="cursor c3" style="--c:#d669ed"><svg viewBox="0 0 20 20"><path d="M3 2l14 6.4-6.2 1.7L8.3 16z"/></svg><span>Анжелика: Краш!</span></div>
+    <div class="cursor c4" style="--c:#ff2d87"><svg viewBox="0 0 20 20"><path d="M3 2l14 6.4-6.2 1.7L8.3 16z"/></svg><span>Дизайн-бог: 300к!</span></div>
+
+    <div class="outro-body">
+      <div class="outro-badge">ЧАСТЬ 1 ЗАВЕРШЕНА</div>
+      <h1 class="title">
+        <span class="t1">Первая часть</span>
+        <span class="t2">пройдена!<i></i><i></i><i></i><i></i><em>3 из 3 закрыто</em></span>
+      </h1>
+
+      <div class="outro-stats">
+        <div class="ostat-card">
+          <div class="ostat-top">
+            <span class="ostat-num" id="finalMoney">5 048 ₽</span>
+            <span class="ostat-label">Итоговый заработок <span class="ostat-sub">(было 48 ₽)</span></span>
+          </div>
+          <div class="ostat-grid">
+            <div class="ostat-item">
+              <span class="ostat-v">3 из 3</span>
+              <span class="ostat-k">заказчиков</span>
+            </div>
+            <div class="ostat-item">
+              <span class="ostat-v">2 шт</span>
+              <span class="ostat-k">донера в запасе</span>
+            </div>
+            <div class="ostat-item">
+              <span class="ostat-v">Выжил</span>
+              <span class="ostat-k">статус финала</span>
             </div>
           </div>
         </div>
-
-        <!-- Нижняя панель с кнопкой рассылки (прибита к низу, видна сразу) -->
-        <div class="tg-dock" id="tg-dock">
-          <button class="tg-dock-btn pulse-glow" id="btn-mass-mail">
-            <span>✉️</span> Запустить веерную рассылку (142 контакта)
-          </button>
-        </div>
-
       </div>
 
-    </div>
-  </main>
+      <p class="tagline">Ты выдержал правки Самвела, сход-развал Михалыча и блёстки Анжелики.</p>
 
-  <script src="game.js"></script>
+      <div class="outro-actions">
+        <button class="start-btn outro-btn" id="restartBtn">
+          <span>Сыграть сначала</span>
+          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.85.99 6.57 2.57L21 8M21 3v5h-5"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Итог (Figma) -->
+  <section class="result" id="result" aria-hidden="true">
+    <div class="result-stage">
+      <div class="result-frame" id="resultFrame"></div>
+      <div class="comment">
+        <div class="avatar av-red" id="commentAvatar">С</div>
+        <div class="comment-text" id="commentText"></div>
+      </div>
+    </div>
+    <div class="amount" id="amount">0 ₽</div>
+    <button class="fg-btn" id="resultBtn"></button>
+  </section>
+
+  <div class="pushes" id="pushes"></div>
+  <div class="toast" id="toast"></div>
+</div>
+<script src="js/engine.js"></script>
+<script src="levels/level-1/level1.js"></script>
+<script src="levels/level-2/level2.js"></script>
+<script src="levels/level-3/level3.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 3000;
+let PORT = parseInt(process.env.PORT, 10) || 3000;
 const ROOT_DIR = __dirname;
 
 const MIME_TYPES = {
@@ -17,7 +17,8 @@ const MIME_TYPES = {
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
   '.mp4': 'video/mp4',
-  '.webm': 'video/webm'
+  '.webm': 'video/webm',
+  '.mp3': 'audio/mpeg'
 };
 
 const server = http.createServer((req, res) => {
@@ -61,17 +62,19 @@ const server = http.createServer((req, res) => {
         'Content-Range': `bytes ${start}-${end}/${totalSize}`,
         'Accept-Ranges': 'bytes',
         'Content-Length': chunkSize,
-        'Content-Type': contentType
+        'Content-Type': contentType,
+        'Cache-Control': 'public, max-age=31536000'
       });
 
       const fileStream = fs.createReadStream(filePath, { start, end });
       fileStream.pipe(res);
     } else {
+      const isMedia = ext === '.mp4' || ext === '.mp3' || ext === '.woff2' || ext === '.png' || ext === '.jpg';
       res.writeHead(200, {
         'Content-Length': totalSize,
         'Content-Type': contentType,
         'Accept-Ranges': 'bytes',
-        'Cache-Control': 'no-cache'
+        'Cache-Control': isMedia ? 'public, max-age=31536000' : 'no-cache'
       });
 
       const fileStream = fs.createReadStream(filePath);
@@ -80,6 +83,20 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+function startServer(port) {
+  server.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+  });
+}
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.log(`Port ${PORT} in use, trying ${PORT + 1}...`);
+    PORT++;
+    startServer(PORT);
+  } else {
+    throw err;
+  }
 });
+
+startServer(PORT);

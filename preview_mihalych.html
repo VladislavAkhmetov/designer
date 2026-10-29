@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=430, initial-scale=1">
+  <title>Михалыч</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/telegram.css">
+  <link rel="stylesheet" href="styles/figma.css">
+  <link rel="stylesheet" href="levels/level-2/level2.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #111418;
+      font-family: Inter, sans-serif;
+      width: 430px;
+      height: 932px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .tg-header {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 18px;
+      background: #171d25;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      z-index: 5;
+    }
+    .tg-back { font-size: 24px; opacity: 0.7; }
+    .tg-av {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 17px;
+      color: #fff;
+      background: #5f6b77;
+    }
+    .tg-info h3 { margin: 0; font-size: 16px; font-weight: 600; }
+    .tg-info p { margin: 2px 0 0; font-size: 13px; color: #4facfe; }
+    .chat-bg {
+      flex: 1;
+      position: relative;
+      background-color: #0e1217;
+      background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .chat-date {
+      display: block;
+      width: max-content;
+      margin: 18px auto 0;
+      padding: 4px 14px;
+      background: rgba(0,0,0,0.45);
+      color: rgba(255,255,255,0.6);
+      font-size: 13px;
+      border-radius: 12px;
+    }
+    .sheet.preview-open {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transform: none !important;
+      opacity: 1 !important;
+      max-height: none;
+      padding: 14px 20px 24px;
+      box-shadow: 0 -15px 40px rgba(0,0,0,0.6);
+    }
+    .sheet.preview-open .frame {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="tg-header">
+    <span class="tg-back">‹</span>
+    <div class="tg-av">М</div>
+    <div class="tg-info">
+      <h3>Михалыч · Автосервис</h3>
+      <p>в сети</p>
+    </div>
+  </div>
+  <div class="chat-bg">
+    <span class="chat-date">Сегодня</span>
+    <section class="sheet preview-open" id="sheet2">
+      <div class="sheet-grip"></div>
+      <h2>Что отправим Михалычу?</h2>
+      <div class="frames">
+        <div class="frame">
+          <span class="frame-name"><b>#</b> Стильный минимализм</span>
+          <span class="frame-box">
+            <span class="sign sign-service-min">
+              <div class="stealth-main">
+                <svg class="stealth-turbine" viewBox="0 0 100 100">
+                  <defs>
+                    <linearGradient id="fanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#ffffff"/>
+                      <stop offset="25%" stop-color="#e2e8f0"/>
+                      <stop offset="65%" stop-color="#64748b"/>
+                      <stop offset="90%" stop-color="#334155"/>
+                      <stop offset="100%" stop-color="#0f172a"/>
+                    </linearGradient>
+                    <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#ffffff"/>
+                      <stop offset="40%" stop-color="#94a3b8"/>
+                      <stop offset="80%" stop-color="#334155"/>
+                      <stop offset="100%" stop-color="#1e293b"/>
+                    </linearGradient>
+                    <g id="fanBlade">
+                      <path d="M 50.00 33.00 C 50.84 27.05, 52.82 20.37, 57.51 5.37 A 45.8 45.8 0 0 1 73.18 12.87 C 69.34 22.84, 63.85 28.53, 66.25 36.98 A 17 17 0 0 0 50.00 33.00 Z" fill="url(#fanGrad)" stroke="#090b0e" stroke-width="0.6"/>
+                      <path d="M 50.00 33.00 C 50.84 27.05, 52.82 20.37, 57.51 5.37 L 58.11 6.55 C 53.64 21.28, 51.78 27.87, 50.59 33.10 Z" fill="#ffffff" opacity="0.95"/>
+                      <path d="M 50.00 33.00 C 50.84 27.05, 52.82 20.37, 57.51 5.37 A 45.8 45.8 0 0 1 73.18 12.87 C 69.34 22.84, 63.85 28.53, 66.25 36.98 A 17 17 0 0 0 50.00 33.00 Z" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+                    </g>
+                  </defs>
+                  <!-- Обод вентилятора -->
+                  <circle cx="50" cy="50" r="48" fill="none" stroke="url(#rimGrad)" stroke-width="2.6"/>
+                  <circle cx="50" cy="50" r="49.3" fill="none" stroke="#090b0e" stroke-width="0.5"/>
+                  <circle cx="50" cy="50" r="46.7" fill="none" stroke="#ffffff" stroke-width="0.6" opacity="0.8"/>
+                  <circle cx="50" cy="50" r="45.8" fill="#090b0e"/>
+                  <!-- 9 идентичных лопастей равной длины -->
+                  <use href="#fanBlade" transform="rotate(0.00 50 50)"/>
+                  <use href="#fanBlade" transform="rotate(40.00 50 50)"/>
+                  <use href="#fanBlade" transform="rotate(80.00 50 50)"/>
+                  <use href="#fanBlade" transform="rotate(120.00 50 50)"/>
+                  <use href="#fanBlade" transform="rotate(160.00 50 50)"/>
+                  <use href="#fanBlade" transform="rotate(200.00 50 50)"/>
+                  <use href="#fanBlade" transform="rotate(240.00 50 50)"/>
+                  <use href="#fanBlade" transform="rotate(280.00 50 50)"/>
+                  <use href="#fanBlade" transform="rotate(320.00 50 50)"/>
+                  <!-- Ступица с фланцем и отверстиями под болты -->
+                  <circle cx="50" cy="50" r="17.0" fill="#181c24" stroke="#ffffff" stroke-width="1.2"/>
+                  <circle cx="50" cy="50" r="14.8" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="0.7"/>
+                  <circle cx="50" cy="50" r="13.2" fill="#101318" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+                  <circle cx="61.00" cy="50.00" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                  <circle cx="59.53" cy="55.50" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                  <circle cx="55.50" cy="59.53" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                  <circle cx="50.00" cy="61.00" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                  <circle cx="44.50" cy="59.53" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                  <circle cx="40.47" cy="55.50" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                  <circle cx="39.00" cy="50.00" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                  <circle cx="40.47" cy="44.50" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                  <circle cx="44.50" cy="40.47" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                  <circle cx="50.00" cy="39.00" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                  <circle cx="55.50" cy="40.47" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                  <circle cx="59.53" cy="44.50" r="1.1" fill="#090b0e" stroke="rgba(255,255,255,0.6)" stroke-width="0.5"/>
+                  <!-- Центральное посадочное отверстие -->
+                  <circle cx="50" cy="50" r="7.0" fill="#090b0e" stroke="#ffffff" stroke-width="1"/>
+                  <circle cx="50" cy="50" r="3.8" fill="#141820"/>
+                </svg>
+                <div class="stealth-title-box">
+                  <span class="stealth-title">АВТОСЕРВИС</span>
+                  <span class="stealth-sub">ТОЧНАЯ МЕХАНИКА & ТЮНИНГ</span>
+                </div>
+              </div>
+              <div class="stealth-bottom">
+                <span>СХОД-РАЗВАЛ 3D</span>
+                <span>РЕМОНТ ДВС</span>
+                <span>ДИАГНОСТИКА</span>
+              </div>
+            </span>
+            <span class="sel"><i></i><i></i><i></i><i></i><em>1920 × 1080</em></span>
+          </span>
+        </div>
+        <div class="frame">
+          <span class="frame-name"><b>#</b> Мужской стандарт</span>
+          <span class="frame-box">
+            <span class="sign sign-brutal">
+              <div class="tacky-checkers l"></div>
+              <div class="tacky-checkers r"></div>
+              <div class="tacky-top-row">
+                <span class="tacky-badge-title">СТО ГАРАЖ №7 У МИХАЛЫЧА</span>
+                <span class="tacky-phone">8-900-СТО-ЧЁТКО</span>
+              </div>
+              <div class="tacky-star">
+                <span>СКИДКА</span>
+                <span>-30%</span>
+              </div>
+              <div class="tacky-mid">
+                <div class="tacky-big-word">АВТОСЕРВИС</div>
+                <div class="tacky-chips-row">
+                  <span class="t-chip y">СХОД-РАЗВАЛ 3D</span>
+                  <span class="t-chip">РЕМОНТ ДВС</span>
+                  <span class="t-chip y">СВАРКА</span>
+                </div>
+              </div>
+              <div class="tacky-footer-items">
+                <span><b>✔</b> БЫСТРО</span>
+                <span><b>✔</b> ДЁШЕВО</span>
+                <span><b>✔</b> ЗАЕЗД 24 ЧАСА ➔</span>
+              </div>
+              <span class="tacky-flame">🔥</span>
+              <div class="tacky-hazard"></div>
+            </span>
+            <span class="sel"><i></i><i></i><i></i><i></i><em>1920 × 1080</em></span>
+          </span>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

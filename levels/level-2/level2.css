@@ -1,0 +1,255 @@
+/* Уровень 2 — Михалыч и автосервис: баннеры для брутального гаража */
+
+#chatC {
+  z-index: 5;
+}
+
+/* =========================================================
+   1. ВЕРНЫЙ ВАРИАНТ: «Мужской стандарт» (КОЛХОЗ / ПОБЕДА)
+   Настоящий безвкусный недизайнерский баннер из провинциального гаража
+   ========================================================= */
+.sign-brutal {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 35%, #e60000 0%, #a80000 50%, #4a0000 100%);
+  font-family: Impact, "Arial Black", sans-serif;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2cqw 2cqw 4.2cqw;
+  box-sizing: border-box;
+  border: 1.2cqw solid #ffe600;
+  container-type: size;
+}
+
+/* Шашечки такси/гонок по краям */
+.tacky-checkers {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3.2cqw;
+  background: repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 1.6cqw 1.6cqw;
+  opacity: 0.8;
+}
+.tacky-checkers.l { left: 0; }
+.tacky-checkers.r { right: 0; }
+
+/* Полоса опасности снизу */
+.tacky-hazard {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4cqw;
+  background: repeating-linear-gradient(
+    -45deg,
+    #ffe600,
+    #ffe600 1.8cqw,
+    #000000 1.8cqw,
+    #000000 3.6cqw
+  );
+  box-shadow: 0 -0.4cqw 1cqw rgba(0,0,0,0.9);
+  border-top: 1.5px solid #fff;
+}
+
+.tacky-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 86%;
+  z-index: 2;
+}
+
+.tacky-badge-title {
+  background: #ffe600;
+  color: #b30000;
+  padding: 0.5cqw 1.8cqw;
+  font-size: 3.4cqw;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid #000;
+  box-shadow: 0.3cqw 0.3cqw 0 #000;
+  transform: rotate(-3deg);
+}
+
+.tacky-phone {
+  background: #000;
+  color: #00ff66;
+  font-family: "Courier New", monospace;
+  padding: 0.4cqw 1.4cqw;
+  font-size: 2.6cqw;
+  font-weight: 900;
+  border: 1.5px solid #ffe600;
+  box-shadow: 0.3cqw 0.3cqw 0 #000;
+}
+
+/* Звезда со скидкой в углу */
+.tacky-star {
+  position: absolute;
+  right: 3.2cqw;
+  top: 5cqw;
+  width: 13cqw;
+  height: 13cqw;
+  background: #ffe600;
+  clip-path: polygon(50% 0, 61% 18%, 82% 10%, 79% 32%, 100% 38%, 84% 54%, 96% 74%, 74% 76%, 70% 98%, 50% 86%, 30% 98%, 26% 76%, 4% 74%, 16% 54%, 0 38%, 21% 32%, 18% 10%, 39% 18%);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-family: "Arial Black", sans-serif;
+  font-weight: 900;
+  color: #b30000;
+  line-height: 0.9;
+  transform: rotate(12deg);
+  box-shadow: 0 0 1cqw rgba(0,0,0,0.8);
+  z-index: 3;
+}
+.tacky-star span:nth-child(1) { font-size: 2.2cqw; }
+.tacky-star span:nth-child(2) { font-size: 3.8cqw; color: #000; }
+
+.tacky-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto 0;
+  z-index: 2;
+}
+
+.tacky-big-word {
+  font-size: 15.5cqw;
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fffb00;
+  text-shadow:
+    2px 2px 0 #000,
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    0 0.7cqw 0 #800000,
+    0 1.2cqw 0 #000,
+    0 1.6cqw 1cqw rgba(0,0,0,0.9);
+  transform: scaleY(1.15);
+}
+
+.tacky-chips-row {
+  display: flex;
+  gap: 1.4cqw;
+  margin-top: 1.2cqw;
+}
+
+.t-chip {
+  background: #0033cc;
+  color: #fff;
+  font-size: 3cqw;
+  font-weight: 900;
+  padding: 0.4cqw 1.4cqw;
+  border: 1.5px solid #fff;
+  box-shadow: 0.3cqw 0.3cqw 0 #000;
+  text-transform: uppercase;
+}
+.t-chip.y { background: #ffe600; color: #000; }
+
+.tacky-footer-items {
+  display: flex;
+  align-items: center;
+  gap: 2cqw;
+  font-family: Arial, sans-serif;
+  font-size: 2.5cqw;
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  text-shadow: 1.5px 1.5px 0 #000;
+  z-index: 2;
+}
+.tacky-footer-items b { color: #00ff66; }
+
+.tacky-flame {
+  position: absolute;
+  left: 3.6cqw;
+  bottom: 4.5cqw;
+  font-size: 4.8cqw;
+  z-index: 3;
+}
+
+
+/* =========================================================
+   2. НЕВЕРНЫЙ ВАРИАНТ: «Стильный минимализм» (ДИЗАЙН-КАЙФ / ФЕЙЛ)
+   С крыльчаткой охлаждения двигателя (все лепестки одной длины, обод)
+   ========================================================= */
+.sign-service-min {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 38%, #1a1c22 0%, #101115 65%, #08090a 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5.5cqw 6.5cqw;
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+  overflow: hidden;
+  border: 1.2cqw solid #1f2229;
+  container-type: size;
+}
+
+.stealth-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4.2cqw;
+  margin: auto 0;
+}
+
+/* Крыльчатка вентилятора охлаждения двигателя */
+.stealth-turbine {
+  width: 17.5cqw;
+  height: 17.5cqw;
+  filter: drop-shadow(0 0.6cqw 1.5cqw rgba(0,0,0,0.85));
+  flex-shrink: 0;
+  animation: turbineRotate 20s linear infinite;
+}
+@keyframes turbineRotate {
+  to { transform: rotate(360deg); }
+}
+
+.stealth-title-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.stealth-title {
+  font-size: 11.5cqw;
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.stealth-sub {
+  font-size: 2.5cqw;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-top: 1.2cqw;
+}
+
+.stealth-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-top: 1px solid rgba(255,255,255,0.14);
+  padding-top: 2cqw;
+  font-size: 2.6cqw;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #e2e8f0;
+}

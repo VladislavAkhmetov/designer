@@ -1,0 +1,294 @@
+/* Уровень 1 — Самвел и шаурма: реклама курса в интро и макеты вывесок */
+
+/* ---------- Реклама курса поверх интро ---------- */
+.ad {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  font-family: Inter, -apple-system, sans-serif;
+  opacity: 0;
+  transition: opacity 0.6s, filter 0.8s, transform 0.9s var(--ease-ios);
+}
+.ad::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 50% 0;
+  background: linear-gradient(180deg, rgba(10, 0, 20, 0.55) 0%, rgba(10, 0, 20, 0.2) 55%, transparent 100%);
+}
+.ad.is-playing { opacity: 1; }
+.ad.is-out { opacity: 0; filter: blur(10px); transform: translateY(-24px) scale(1.04); }
+
+/* Гигантская контурная бегущая строка — задний план */
+.ad-marquee {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--safe-top) + 96px);
+  overflow: hidden;
+  transform: rotate(-4deg) scale(1.1);
+  opacity: 0;
+}
+.ad.is-playing .ad-marquee { animation: adFadeIn 1s 0.2s forwards; }
+@keyframes adFadeIn { from { opacity: 0; } to { opacity: 1; } }
+.ad-marquee > div { display: flex; width: max-content; animation: marquee 9s linear infinite; }
+.ad-marquee span {
+  padding-right: 0.35em;
+  font-size: 128px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+}
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* Кинетический текст — передний план */
+.ad-copy {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  top: calc(var(--safe-top) + 64px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+}
+.ad-chip {
+  margin-bottom: 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: none;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+}
+.ad.is-playing .ad-chip { animation: chipIn 0.6s 0.4s var(--ease-spring) forwards; }
+@keyframes chipIn { to { opacity: 1; transform: none; } }
+
+.ad-line { display: block; overflow: hidden; padding: 0 12px 4px 0; margin-right: -12px; }
+.ad-line > span {
+  display: inline-block;
+  position: relative;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  transform: translateY(110%);
+}
+.ad.is-playing .ad-line > span { animation: lineUp 0.7s var(--ease-ios) forwards; }
+.ad.is-playing .ad-line:nth-of-type(2) > span { animation-delay: 0.9s; }
+.ad.is-playing .ad-line:nth-of-type(3) > span { animation-delay: 1.4s; }
+.ad.is-playing .ad-line:nth-of-type(4) > span { animation-delay: 3.3s; }
+.ad.is-playing .ad-line:nth-of-type(5) > span { animation-delay: 4.5s; }
+@keyframes lineUp { to { transform: none; } }
+
+/* 300 000 ₽ на розовой маркерной плашке */
+.ad-big { padding: 8px 16px 10px 4px; margin: 4px 0 2px -4px; }
+.ad-big > span { font-size: 58px; font-weight: 900; letter-spacing: -0.05em; line-height: 1; padding: 0 6px; text-shadow: none; }
+.ad-big em { font-style: normal; font-variant-numeric: tabular-nums; position: relative; }
+.ad-hl {
+  position: absolute;
+  inset: 4px -4px 0 -2px;
+  z-index: -1;
+  background: #ff2d87;
+  transform: rotate(-2deg) scaleX(0);
+  transform-origin: left center;
+  box-shadow: 0 8px 30px rgba(255, 45, 135, 0.5);
+}
+.ad-big > span { z-index: 0; }
+.ad.is-playing .ad-hl { animation: hlSwipe 0.5s 1.75s var(--ease-ios) forwards; }
+@keyframes hlSwipe { to { transform: rotate(-2deg) scaleX(1); } }
+
+/* «2 недели» подчёркиваются от руки */
+.ad-line u { position: relative; text-decoration: none; }
+.ad-line u svg {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  bottom: -7px;
+  width: calc(100% + 4px);
+  height: 11px;
+  overflow: visible;
+}
+.ad-line u path { fill: none; stroke: #ff2d87; stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; }
+.ad.is-playing .ad-line u path { animation: draw 0.7s 3.9s ease-out forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+.ad-small > span { margin-top: 6px; font-size: 18px; font-weight: 500; font-style: italic; opacity: 0.85; letter-spacing: -0.01em; }
+
+
+/* =========================================================
+   МАКЕТЫ ВЫВЕСОК (масштабируются от ширины через cqw)
+   ========================================================= */
+.sign { position: absolute; inset: 0; overflow: hidden; container-type: size; display: block; }
+
+/* --- Народный люкс: лайтбокс с лампочками, лучи, WordArt, гигантское мясо --- */
+.sign-lux {
+  background:
+    repeating-conic-gradient(from 0deg at 74% 50%, rgba(255, 214, 0, 0.32) 0deg 7deg, transparent 7deg 14deg),
+    radial-gradient(90% 120% at 74% 50%, #ff2a1a 0%, #c30016 45%, #6d000d 100%);
+}
+.lux-bulbs {
+  position: absolute;
+  inset: 2.2cqw;
+  border: 1.5cqw dotted #fff3a6;
+  border-radius: 2.5cqw;
+  filter: drop-shadow(0 0 1cqw #ffcc00);
+  animation: bulbs 0.7s steps(1) infinite;
+}
+@keyframes bulbs { 50% { border-color: #ffb800; filter: drop-shadow(0 0 0.4cqw #ff8800); } }
+
+.lux-left {
+  position: absolute;
+  left: 7cqw;
+  top: 0;
+  bottom: 0;
+  width: 52cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2.4cqw;
+}
+.lux-title {
+  font-family: "Comic Sans MS", "Comic Neue", cursive;
+  font-weight: 700;
+  font-size: 11cqw;
+  line-height: 0.9;
+  color: #ffe600;
+  -webkit-text-stroke: 0.35cqw #5a0000;
+  text-shadow:
+    0 0.4cqw 0 #ffa200,
+    0 0.8cqw 0 #e05a00,
+    0 1.2cqw 0 #a10000,
+    0 1.6cqw 0 #5a0000,
+    0 2.6cqw 2cqw rgba(0,0,0,0.55);
+  transform: rotate(-6deg) skewX(-6deg);
+  transform-origin: left center;
+}
+.lux-ribbon {
+  margin-top: 1.6cqw;
+  padding: 0.8cqw 2.6cqw;
+  background: #0a3cff;
+  color: #fff;
+  font-family: Impact, "Arial Black", Inter, sans-serif;
+  font-weight: 900;
+  font-size: 4cqw;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transform: rotate(-3deg) skewX(-12deg);
+  box-shadow: 0.8cqw 0.8cqw 0 #ffe600;
+}
+.lux-247 {
+  font-family: Impact, "Arial Black", Inter, sans-serif;
+  font-weight: 900;
+  font-size: 5.4cqw;
+  color: #a6ff00;
+  text-shadow: 0 0 1cqw #4dff00, 0 0 3cqw #4dff00;
+  transform: rotate(-3deg);
+  animation: neon 2.2s steps(1) infinite;
+}
+@keyframes neon { 0%, 100% { opacity: 1; } 47% { opacity: 0.3; } 50% { opacity: 1; } 53% { opacity: 0.4; } }
+
+.lux-photo {
+  position: absolute;
+  right: 5cqw;
+  top: 50%;
+  width: 36cqw;
+  height: 36cqw;
+  margin-top: -18cqw;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1cqw solid #fff;
+  box-shadow: 0 0 0 1cqw #ffd400, 0 0 6cqw 1cqw rgba(255, 200, 0, 0.8);
+}
+.lux-photo img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.25); display: block; }
+.lux-burst {
+  position: absolute;
+  right: 30cqw;
+  bottom: 4cqw;
+  width: 15cqw;
+  height: 17cqw;
+  display: grid;
+  place-items: center;
+  background: #fff200;
+  clip-path: polygon(50% 0, 61% 18%, 82% 10%, 79% 32%, 100% 38%, 84% 54%, 96% 74%, 74% 76%, 70% 98%, 50% 86%, 30% 98%, 26% 76%, 4% 74%, 16% 54%, 0 38%, 21% 32%, 18% 10%, 39% 18%);
+  animation: wobble 1.6s ease-in-out infinite;
+}
+.lux-burst span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Comic Sans MS", "Comic Neue", cursive;
+  font-weight: 700;
+  font-size: 2.6cqw;
+  line-height: 1;
+  color: #c30016;
+}
+.lux-burst b { font-size: 4cqw; }
+@keyframes wobble { 0%, 100% { transform: rotate(-12deg) scale(1); } 50% { transform: rotate(8deg) scale(1.08); } }
+.lux-spark { position: absolute; color: #fff; font-size: 4cqw; text-shadow: 0 0 1.5cqw #fff; animation: twinkle 1.4s ease-in-out infinite; }
+.lux-spark.s1 { left: 54cqw; top: 9cqw; }
+.lux-spark.s2 { right: 6cqw; bottom: 6cqw; animation-delay: 0.5s; font-size: 5cqw; }
+.lux-spark.s3 { left: 6cqw; bottom: 8cqw; animation-delay: 0.9s; font-size: 3cqw; }
+@keyframes twinkle { 0%, 100% { transform: scale(0.4) rotate(0); opacity: 0.4; } 50% { transform: scale(1.1) rotate(45deg); opacity: 1; } }
+
+/* --- Минимализм: логотип в античном духе — лён, лавровый венок, антиква --- */
+.sign-min {
+  --ink: #2a2420;
+  --terra: #b5603b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(110% 100% at 50% 40%, #f5efe6 0%, #e9e0d1 100%);
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  color: var(--ink);
+}
+.sign-min::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.2 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.gr-mark { position: relative; width: 25cqw; height: 25cqw; }
+.laurel { position: absolute; inset: 0; width: 100%; height: 100%; fill: var(--terra); }
+.laurel .lw-stem { fill: none; stroke: var(--terra); stroke-width: 0.6; stroke-linecap: round; }
+.gr-mono {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding-bottom: 0.6cqw;
+  font-weight: 400;
+  font-size: 7cqw;
+  line-height: 1;
+}
+.gr-word {
+  margin-top: 2.2cqw;
+  margin-right: -0.6em; /* компенсируем трекинг последней буквы */
+  font-weight: 500;
+  font-size: 4.4cqw;
+  letter-spacing: 0.6em;
+}
+.gr-sub {
+  margin-top: 1.4cqw;
+  font-style: italic;
+  font-size: 2.5cqw;
+  letter-spacing: 0.04em;
+  color: #8a7d6f;
+}
+

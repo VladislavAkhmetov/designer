@@ -1,0 +1,20 @@
+/* Плеер видеосообщений: кружок <-> полный экран */
+
+/* =========================================================
+   ПЛЕЕР: кружок <-> полный экран
+   ========================================================= */
+.player {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: #000;
+  transform-origin: 50% 50%;
+  transition: transform 0.7s var(--ease-ios), clip-path 0.7s var(--ease-ios);
+  will-change: transform, clip-path;
+}
+.player.no-anim { transition: none; }
+.player video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.player .skip { transition: opacity 0.3s; }
+.player.is-circle .skip { opacity: 0; pointer-events: none; }
+
+

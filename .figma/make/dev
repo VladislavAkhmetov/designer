@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Статика с live reload через Vite (без package.json, через pnpm dlx).
+set -eu
+exec pnpm dlx vite --port "$PORT" --strictPort --host
